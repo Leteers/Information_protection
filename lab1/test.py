@@ -1,82 +1,50 @@
 import os
 import hashlib
 import subprocess
+rel_path = "docs/leasing.txt"
+hsh = subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst",
+                     "-sha1", rel_path], stdout=subprocess.PIPE).stdout.decode().strip()
+hsh = hsh[hsh.find(" ")+1:]
+
 
 def main():
-    try:
-        file_path = "C:/Users/fn111/Desktop/Polytech/6/Peresdachi/Information_protection/lab1"
-        other_way(file_path)
+    args = init()
+    new_sha1 = args[0]
+    counter = args[1]
+    while counter < 300 and new_sha1 != hsh:
+        with open(f"docs/leasing{counter-1}.txt", "r", encoding='utf-8') as f:
+            with open(f"docs/leasing{counter}.txt", "w", encoding='utf-8') as wrt:
+                wrt.write("\n")
+                a = f.readline()
+                while a:
+                    wrt.write(a)
+                    a = f.readline()
+                wrt.close()
+        f.close()
+        new_sha1 = subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst",
+                                   "-sha1", f"docs/leasing{counter}.txt"], stdout=subprocess.PIPE).stdout.decode().strip()
+        new_sha1 = new_sha1[new_sha1.find(" ")+1:]
+        print(f"leasing{counter}.txt " + new_sha1 + " " +
+              str(os.path.getsize(f"docs/leasing{counter}.txt")) + " bytes. Size difference: " + str(os.path.getsize(f"docs/leasing{counter}.txt") - os.path.getsize("docs/leasing.txt")) + " bytes.")
+        counter += 1
 
-        git_dir_path = "C:/Users/fn111/Desktop/Polytech/6/Peresdachi/Information_protection/lab1/docs"
-        subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst", "-sha1", os.path.join(git_dir_path, "leasing.txt")], cwd=git_dir_path, stdout=subprocess.PIPE)
-        file = os.path.join(git_dir_path, "leasing.txt")
-        file_size_in_bytes = os.path.getsize(file)
-        print(subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst", "-sha1", file], cwd=git_dir_path, stdout=subprocess.PIPE).stdout.decode().strip())
-        print(f"Размер исходного файла {file_size_in_bytes} байт")
-    except (OSError, subprocess.CalledProcessError) as e:
-        print(e)
 
-def process_build(count):
-    try:
-        new_file_path = f"C:/Users/fn111/Desktop/Polytech/6/Peresdachi/Information_protection/lab1/docs/leasing{count}.txt"
-        subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst", "-sha1", new_file_path], cwd=new_file_path, stdout=subprocess.PIPE)
-    except (OSError, subprocess.CalledProcessError) as e:
-        print(e)
+def init():
+    with open(rel_path, "r", encoding='utf-8') as f:
+        with open("docs/leasing0.txt", "w", encoding='utf-8') as wrt:
+            wrt.write("\n")
+            a = f.readline()
+            while a:
+                wrt.write(a)
+                a = f.readline()
+            wrt.close()
+        f.close()
+    new_sha1 = subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst",
+                              "-sha1", 'docs/leasing0.txt'], stdout=subprocess.PIPE).stdout.decode().strip()
+    new_sha1 = new_sha1[new_sha1.find(" ")+1:]
+    counter = 1
+    return[new_sha1, counter]
 
-def other_way(file_path):
-    try:
-        file_name = "/leasing.txt"
-        count = 0
-
-        while count < 300:
-            space_index = -1
-            with open(file_path + file_name, "r", encoding='utf-8') as reader:
-                line = reader.readline()
-                space_index = line.find(" ", space_index + 1)
-
-                if space_index != -1:
-                    count += 1
-                    output_file_name = f"/leasing{count}.txt"
-
-                    with open(file_path + output_file_name, "w" ,encoding="utf8") as writer:
-                        writer.write(line[:space_index] + "ㅤ" + line[space_index + 1:])
-                        writer.write("\n")
-
-                        while True:
-                            next_line = reader.readline()
-                            if not next_line:
-                                break
-                            writer.write(next_line)
-
-                    sha1(file_path, output_file_name)
-                    file_name = output_file_name
-
-                else:
-                    line += "\n" + reader.readline()
-
-    except Exception as e:
-        print(e)
-
-def sha1(file_path, output_file_name):
-    try:
-        sha1_hash = hashlib.sha1()
-
-        with open(file_path + output_file_name, "rb" ) as file:
-            while True:
-                data = file.read(1024)
-                if not data:
-                    break
-                sha1_hash.update(data)
-
-        sha1_hex = sha1_hash.hexdigest()
-        file_size_in_bytes = os.path.getsize(file_path + output_file_name)
-        print(f"SHA-1 файла {output_file_name}: {sha1_hex}, размер файла {file_size_in_bytes} байт")
-
-        if sha1_hex == "16a811e9c6cafab963b1e35f5c5cb6108dee5b64":
-            exit(0)
-
-    except Exception as e:
-        print(e)
 
 if __name__ == "__main__":
     main()
