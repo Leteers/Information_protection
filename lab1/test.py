@@ -1,5 +1,4 @@
 import os
-import hashlib
 import subprocess
 rel_path = "docs/leasing.txt"
 hsh = subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst",
