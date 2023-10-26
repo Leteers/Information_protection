@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-body{
+body {
     position: relative;
     height: 100vh;
     display: flex;
@@ -20,6 +20,7 @@ header {
     width: 100%;
     margin-bottom: 20px;
 }
+
 .input-section {
     width: 100%;
     display: flex;
@@ -30,7 +31,20 @@ header {
     height: 100%;
 }
 
-.input-section input{
+.input-section input {
     margin-right: 10px;
     max-width: 100%;
+}
+
+table {
+    margin: auto;
+    width: 50%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th,
+td {
+    padding: 10px;
+    border: 1px solid black;
 }

@@ -11,11 +11,17 @@
 
 <body>
     <div class="relative inline-block w-64">
-        <form method="post" action="login">
+        <form method="post" action="send_vote">
             <div class="input-section">
-                <input type="text" id="text_field" placeholder="Add a todo . . ."
-                    class="input input-bordered input-secondary w-full max-w-xs"></input>
-                <button id="theButton" class="btn btn-secondary add-task-button">Add</button>
+                <div class="relative inline-block w-64">
+                    <select
+                        class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name = "select">
+                        <option>Алексей</option>
+                        <option>Иван</option>
+                        <option>Анастасия</option>
+                    </select>
+                </div>
+                <button id="theButton" class="btn btn-secondary add-task-button">Выбрать</button>
             </div>
         </form>
     </div>
