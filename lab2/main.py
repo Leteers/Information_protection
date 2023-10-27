@@ -13,7 +13,7 @@ hsh = subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst",
 hsh = hsh[hsh.find(" ")+1:]
 hsh = bin(int(hsh, 16))[2:]
 
-
+#Создание ключа содержащего координаты и цвет пикселя с длиной равной длинне закодированного текстового файла. 
 def keygen(file_width, file_height, sha_len):
     a = []
     for i in range(len(sha_len)):
@@ -30,7 +30,7 @@ def keygen(file_width, file_height, sha_len):
         f.write(str(a))
     return(a)
 
-
+#Получение данных о пикслеях в двоичном представлении.
 def read_bmp_pixels_rgb(file_path):
     img = Image.open(file_path)
     pixel_data = list(img.getdata())
@@ -38,7 +38,7 @@ def read_bmp_pixels_rgb(file_path):
         pixel[1], '08b'), format(pixel[2], '08b')] for pixel in pixel_data]
     return binary_pixel_data
 
-
+#Создание файла по пикселям.
 def create_image_from_pixels(pixel_data, width, height, file_path):
     img = Image.new('RGB', (width, height))
     pixels = img.load()
@@ -49,7 +49,7 @@ def create_image_from_pixels(pixel_data, width, height, file_path):
     img.save(file_path)
     return 1
 
-
+#Замена последнего бита в байте цвета.
 def LSB_Replacement(file_width, file_height, sha, pixel_data, output_file_path):
     key = keygen(file_width, file_height, sha)
     # Ключ хранит в себе значения переменных pixel_data в которых хранятся хеш значения. Слева направа.
@@ -59,7 +59,7 @@ def LSB_Replacement(file_width, file_height, sha, pixel_data, output_file_path):
     create_image_from_pixels(pixel_data, file_width,
                              file_height, output_file_path)
 
-
+#Получение из файла изобржения зашифрованного хеша файла с помощью ключа
 def return_sha1_hash(pixel_data):
     fin = ""
     with open("key.txt", "r") as f:
