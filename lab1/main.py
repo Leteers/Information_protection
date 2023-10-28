@@ -1,8 +1,10 @@
 import os
 import subprocess
+
 rel_path = "docs/leasing.txt"
 hsh = subprocess.run(["C:/Program Files/Git/usr/bin/openssl.exe", "dgst",
                      "-sha1", rel_path], stdout=subprocess.PIPE).stdout.decode().strip()
+print(hsh)
 hsh = hsh[hsh.find(" ")+1:]
 
 
